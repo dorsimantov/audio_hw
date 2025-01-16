@@ -186,7 +186,40 @@ plt.tight_layout()
 plt.savefig(f"{OUTPUT_DIR}stft_signals.png")
 plt.show()
 
-print("FINISHED PROCESSING QUESTION 1")
+# Time-domain plots
+plt.figure(figsize=(12, 10))
+time_clean = np.arange(len(clean_signal)) / FS
+time_mic = np.arange(len(mic_signals[0])) / FS
+time_noisy_gaussian = np.arange(len(noisy_gaussian[0])) / FS
+time_noisy_interfering = np.arange(len(noisy_interfering[0])) / FS
+
+plt.subplot(4, 1, 1)
+plt.plot(time_clean, clean_signal)
+plt.title("Clean Speech Signal - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 2)
+plt.plot(time_mic, mic_signals[0])
+plt.title("Clean Signal at First Microphone - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 3)
+plt.plot(time_noisy_gaussian, noisy_gaussian[0])
+plt.title("Signal at First Microphone with Gaussian Noise (SNR 10 dB) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 4)
+plt.plot(time_noisy_interfering, noisy_interfering[0])
+plt.title("Signal at First Microphone with Interfering Speaker (SNR 10 dB) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}sample_time_domain_signals.png")
+plt.show()
 
 ########## QUESTION 2 ###########
 
@@ -467,4 +500,37 @@ plt.title("MVDR Beamformer Output (Interfering Noise)")
 
 plt.tight_layout()
 plt.savefig(f"{OUTPUT_DIR}beamformer_spectrograms.png")
+plt.show()
+
+# Plot time-domain signals for the first instance as an example
+plt.figure(figsize=(12, 10))
+
+time = np.arange(len(das_output_gaussian)) / FS  # Time axis
+
+plt.subplot(4, 1, 1)
+plt.plot(time, das_output_gaussian)
+plt.title("Delay-&-Sum Beamformer Output (Gaussian Noise) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 2)
+plt.plot(time, mvdr_output_gaussian)
+plt.title("MVDR Beamformer Output (Gaussian Noise) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 3)
+plt.plot(time, das_output_interfering)
+plt.title("Delay-&-Sum Beamformer Output (Interfering Noise) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(4, 1, 4)
+plt.plot(time, mvdr_output_interfering)
+plt.title("MVDR Beamformer Output (Interfering Noise) - Time Domain")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}beamformer_time_domain.png")
 plt.show()
