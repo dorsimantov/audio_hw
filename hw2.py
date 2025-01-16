@@ -389,6 +389,59 @@ print("Average Metrics Across All Instances:")
 for method, metrics in average_metrics.items():
     print(f"{method}: PESQ={metrics['pesq']:.2f}, ESTOI={metrics['estoi']:.2f}, SI-SDR={metrics['si_sdr']:.2f}")
 
+# Prepare data for plotting
+methods = ["DAS (Gaussian)", "MVDR (Gaussian)", "DAS (Interfering)", "MVDR (Interfering)"]
+pesq_scores = [
+    average_metrics["das_gaussian"]["pesq"],
+    average_metrics["mvdr_gaussian"]["pesq"],
+    average_metrics["das_interfering"]["pesq"],
+    average_metrics["mvdr_interfering"]["pesq"]
+]
+estoi_scores = [
+    average_metrics["das_gaussian"]["estoi"],
+    average_metrics["mvdr_gaussian"]["estoi"],
+    average_metrics["das_interfering"]["estoi"],
+    average_metrics["mvdr_interfering"]["estoi"]
+]
+si_sdr_scores = [
+    average_metrics["das_gaussian"]["si_sdr"],
+    average_metrics["mvdr_gaussian"]["si_sdr"],
+    average_metrics["das_interfering"]["si_sdr"],
+    average_metrics["mvdr_interfering"]["si_sdr"]
+]
+
+# Plot the metrics
+x = np.arange(len(methods))  # Label locations
+width = 0.25  # Width of the bars
+
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Bars for each metric
+ax.bar(x - width, pesq_scores, width, label="PESQ")
+ax.bar(x, estoi_scores, width, label="ESTOI")
+ax.bar(x + width, si_sdr_scores, width, label="SI-SDR")
+
+# Customize the plot
+ax.set_xlabel("Beamforming Method and Noise Type")
+ax.set_ylabel("Metric Scores")
+ax.set_title("Comparison of Metrics for DAS and MVDR Beamforming")
+ax.set_xticks(x)
+ax.set_xticklabels(methods)
+ax.legend()
+
+# Add text on bars
+for i, v in enumerate(pesq_scores):
+    ax.text(i - width, v + 0.1, f"{v:.2f}", ha="center", va="bottom", fontsize=8)
+for i, v in enumerate(estoi_scores):
+    ax.text(i, v + 0.1, f"{v:.2f}", ha="center", va="bottom", fontsize=8)
+for i, v in enumerate(si_sdr_scores):
+    ax.text(i + width, v + 0.1, f"{v:.2f}", ha="center", va="bottom", fontsize=8)
+
+# Save and show plot
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}metrics_comparison.png")
+plt.show()
+
 # Plot spectrograms for the first instance as an example
 plt.figure(figsize=(12, 10))
 
